@@ -38,7 +38,9 @@ Assuming that the "total number of people working" is equal to the total number 
 
 ## GovHack ATO 2018: Postcode, Total number of people lodged tax return
 https://data.gov.au/dataset/govhackato/resource/f3bcbd38-b3e9-4a27-8729-2314f05a6ae4?inner_span=True
+
 Raw data in: data/ato/atoabsgovhack2018.xlsx
+
 Extracted each sheet such that:
 
 ```
@@ -52,6 +54,19 @@ data/
 ```
 
 ## Census DataPacks: Postcode, Total number of people working.
+https://datapacks.censusdata.abs.gov.au/datapacks/
+
+Raw data in (ignored): data/census/gcppoa/raw
+
+Extracted the data of interest into:
+
+```
+data/census/
+└── gcppoa
+    ├── 2016Census_G43A_AUS_POA.csv
+    ├── 2016Census_G43B_AUS_POA.csv
+    └── raw
+```
 
 # Members
 
