@@ -65,7 +65,7 @@ class Map extends Component {
             }
         }).addTo(map)
 
-        var popupTemplate = '<h3>{POA}</h3>{deltaPeople}<br/>{deltaPeoplePC}'
+        var popupTemplate = '<h3>{POA}</h3><b>Change in Filed Returns: </b>{deltaPeople}<br/><b>% Impact: </b>{deltaPeoplePC}'
 
         SA3Zones.bindPopup(function(e){
             _this.props.UIState.regionSelected = e.feature.properties.POA_NAME_2016
