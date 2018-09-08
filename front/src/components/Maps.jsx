@@ -3,6 +3,7 @@ import React, {Component} from 'react'
 import 'leaflet/dist/leaflet.css'
 import {Select} from 'semantic-ui-react'
 import mlMap from '../stores/ml'
+import { observer, inject } from 'mobx-react';
 
 let L,E,chroma
 L = require('leaflet')
@@ -35,6 +36,9 @@ config.tileLayer = {
 
 // var colorScale = chroma.scale()
 var colorScale = chroma.scale(['red', 'white','blue']).domain([-10,10])
+
+@inject('UIState')
+@observer
 class Map extends Component {
     constructor(props) {
         super(props)
@@ -46,6 +50,7 @@ class Map extends Component {
 
     init(id) {
         if (this.state.map) return
+        let _this = this
         let map = L.map(id, config.params)
         L.control.zoom({ position: 'bottomleft'}).addTo(map)
         L.control.scale({ position: 'bottomright'}).addTo(map)
@@ -67,6 +72,7 @@ class Map extends Component {
         var popupTemplate = '<h3>{POA}</h3>{deltaPeople}<br/>{deltaPeoplePC}'
 
         SA3Zones.bindPopup(function(e){
+            _this.props.UIState.regionSelected = e.feature.properties.POA_NAME_2016
             var value = e.feature.properties.POA_NAME_2016
             return L.Util.template(popupTemplate,
                 {POA : value,
