@@ -2,8 +2,7 @@
 import React, {Component} from 'react'
 import 'leaflet/dist/leaflet.css'
 import {Select} from 'semantic-ui-react'
-import mlMap from '../stores/ml'
-import { observer, inject } from 'mobx-react';
+import { observer, inject } from 'mobx-react'
 
 let L,E,chroma
 L = require('leaflet')
@@ -40,12 +39,9 @@ var colorScale = chroma.scale(['red', 'white','blue']).domain([-10,10])
 @inject('UIState')
 @observer
 class Map extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            map: null,
-            tileLayer: null,
-        }
+    state = {
+        map: null,
+        tileLayer: null,
     }
 
     init(id) {
@@ -60,7 +56,7 @@ class Map extends Component {
             url: 'https://geo.abs.gov.au/arcgis/rest/services/ASGS2016/POA/MapServer/0',
             style: function (e) {
                 try {
-                    var value=mlMap[e.properties.POA_CODE_2016]['deltaPeoplePC']
+                    var value=_this.props.data[e.properties.POA_CODE_2016]['deltaPeoplePC']
                 }
                 catch(err){
                     value = 0
@@ -76,8 +72,8 @@ class Map extends Component {
             var value = e.feature.properties.POA_NAME_2016
             return L.Util.template(popupTemplate,
                 {POA : value,
-                    deltaPeople: mlMap[value]['deltaPeople'],
-                    deltaPeoplePC: mlMap[value]['deltaPeoplePC']}
+                    deltaPeople: _this.props.data[value]['deltaPeople'],
+                    deltaPeoplePC: Math.floor(_this.props.data[value]['deltaPeoplePC'])}
             )
         })
         this.setState({map: map})
