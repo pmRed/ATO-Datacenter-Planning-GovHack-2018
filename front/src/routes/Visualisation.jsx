@@ -78,10 +78,10 @@ class Page extends Component {
         return (
             <Container fluid  style={{padding:'50px 50px'}}>
                 <h1> Machine Learning Analytics</h1>
-                <Segment> 
-                    <h2>ML Predictor</h2>
+                <Segment textAlign='center'> 
+                    <h2>Intelligent Predictor</h2>
                     <p> </p>
-                    <Grid columns='equal'>
+                    <Grid columns='equal' textAlign='center' divided>
                         <Grid.Column>
                             <h3>ATO only data</h3>
                             <Container fluid style={{ height:'800px'}}>
@@ -95,10 +95,8 @@ class Page extends Component {
                             </Container>
                         </Grid.Column>
                     </Grid>
-                </Segment>
-                <Segment style={{height:'100%'}}>
                     <h2>Aggregate Statics</h2>
-                    <Grid columns='equal'>
+                    <Grid divided columns='equal'>
                         <Grid.Column>
                             <Bar
                                 data={datasml}
@@ -122,7 +120,7 @@ class Page extends Component {
                             </Bar>
                         </Grid.Column>
                     </Grid>
-                    <Grid columns='equal'>
+                    <Grid divided columns='equal'>
                         <Grid.Column>
                             <Bar
                                 data={datasmlPC}
