@@ -19,3 +19,30 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+# ignore text editor stuff
+*.bak
+*~
+\#*\#
+.\#*
+
+
+# ignore usual data files
+*.dat
+
+# silly little lock files
+.~lock.*
+
+# compiled files
+build/
+
+# compile objects
+*.so
+*.d
+*.pcm
+*.d
+*.o
+
+# CMake Stuff
+CMake*
+!Makefile
+!CMakeLists.txt
