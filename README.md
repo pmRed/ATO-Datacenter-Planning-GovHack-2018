@@ -21,11 +21,11 @@ So for each postal code, we fix all variables, except the number of tax centers 
 
 We can then rank the suburbs according to the predictd impact of adding a new tax center.
 
-It is important to note, that this model is *extremely* flexible, and is not at all limited to predicting the effect of tax centers. We could use it to predict changes in taxation due to demographic shifts with respect to age, sex, occupational status, etc.:x
+It is important to note, that this model is **extremely** flexible, and is not at all limited to predicting the effect of tax centers. We could use it to predict changes in taxation due to demographic shifts with respect to age, sex, occupational status, etc.:x
 
 
 ## Model
-Given the mix of continuous and discrete types in the census data, and the relatvely small size of the sample set (i.e. number of taxed postcodes), we have used a gradient-boosted forest of regression trees.
+Given the mix of continuous and discrete types in the census data, and the relatvely small size of the sample set (i.e. number of taxed postcodes), we have used a gradient-boosted forest of regression trees. We have employed the DART tree booster (described in _Rashmi Korlakai Vinayak, Ran Gilad-Bachrach. “DART: Dropouts meet Multiple Additive Regression Trees.” JMLR._) which adapts dropout regularisation from deep learning to boosted trees, amelioriating the tendency of these models to overfit their training data.
 
 We are interested in quantifying the uncertainty of our predictions, and some progress has been made by adapting a quartile regresion procedure. Another alternative model which we considered was deep neural-net trained using Bayes-by-backprop. Using something like a Gaussian prior on each weight/bias variable intrinsially defines a confidence in the value of the parameter which can be propagated to give a confidence interval on the prediction. It is also well-suited to dealing with potentially empty values in the census data (many postcodes we're lacking demographic information, although normalisation  would be necessary to prevent sparsely-populated variables from becoming irrelevant in the model. However, Bayes-by-backprop models are somewhat time-consuming to train, especially if they have to deal with the 400+ combined ABS/ATO variables that we want to use.
 
