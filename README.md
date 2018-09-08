@@ -19,9 +19,9 @@ Although this model is very flexible, since _any_ input parameter can be varied 
 
 So for each postal code, we fix all variables, except the number of tax centers whch we increment by 1. Then we compare the predicted number of filed tax returns of each postcal code, with the recorded number of tax returns (wthout the extra tax center.
 
-We can then rank the suburbs according to the predictd impact of adding a new tax center.
+**We can then calculate predicted impact of adding a new tax center at any particular postcode.** This is the key result of this project, which allows the ATO to identify the best locations to benefit the most people.
 
-It is important to note, that this model is **extremely** flexible, and is not at all limited to predicting the effect of tax centers. We could use it to predict changes in taxation due to demographic shifts with respect to age, sex, occupational status, etc.:x
+However, it is important to note, that this model is **extremely** flexible, and is not at all limited to predicting the effect of tax centers. We could use it to predict changes in taxation due to demographic shifts with respect to age, sex, occupational status, etc.:x
 
 
 ## Model
