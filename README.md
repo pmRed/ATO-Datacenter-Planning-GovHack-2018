@@ -5,18 +5,31 @@ This project attempts to find the optimal place to tax help centres.
 _*Find a way to verify if the ATO has optimised the location of Tax Help centres to benefit the intended clients.*_
 
 # Solution
-Let's decide on some metrics that are indicative of the outcomes the ATO want to see by adding more tax centres.
+Let's decide on some metrics that are indicative of the outcomes the ATO want to see by adding a new tax centre to a given postal address:
 1. Total number of tax returns filed
 2. Fraction of tax returns filed
 
-We propose building a model, which, when given
-- a postcode
+We propose building a model, which, when given postcode level information about
+- ATO data
 - census data
 - a number of tax centers
-predicts the aforementioned metrics, _ideally with some confidence interval_.
-We want to then build a ranking of postcodes which shows the marginal gain, with respect to the aformentioned metrics, of building a new tax center in that postcode. If we have a confidence interval for the metrics, we should do something sensible, like ranking by the lower bound of the Wilson interval or by $x-2\sigma_x$.
+predicts the aforementioned metrics, ideally with some confidence interval.
 
-Given the mix of continuous and discrete types in the census data, and the relatvely small size of the sample set (i.e. number of taxed postcodes), we should use a random forest approach (e.g. xgboost). Not sure how this can generate a confidence intervals. We could use a neural-net and apply Bayes-by-backprop to generate confidence intervals on predictions, however, not sure how well a Bayesian estimator for NN parameters works with discrete variables.
+Although this model is very flexible, since _any_ input parameter can be varied (of which there are over 400) to predict the metrics, we are particularly interested in how changing the number of tax centers affects the number of tax returns. 
+
+So for each postal code, we fix all variables, except the number of tax centers whch we increment by 1. Then we compare the predicted number of filed tax returns of each postcal code, with the recorded number of tax returns (wthout the extra tax center.
+
+**We can then calculate predicted impact of adding a new tax center at any particular postcode.** This is the key result of this project, which allows the ATO to identify the best locations to benefit the most people.
+
+However, it is important to note, that this model is **extremely** flexible, and is not at all limited to predicting the effect of tax centers. We could use it to predict changes in taxation due to demographic shifts with respect to age, sex, occupational status, etc.:x
+
+
+## Model
+Given the mix of continuous and discrete types in the census data, and the relatvely small size of the sample set (i.e. number of taxed postcodes), we have used a gradient-boosted forest of regression trees. We have employed the DART tree booster (described in _Rashmi Korlakai Vinayak, Ran Gilad-Bachrach. “DART: Dropouts meet Multiple Additive Regression Trees.” JMLR._) which adapts dropout regularisation from deep learning to boosted trees, amelioriating the tendency of these models to overfit their training data.
+
+We are interested in quantifying the uncertainty of our predictions, and some progress has been made by adapting a quartile regresion procedure. Another alternative model which we considered was deep neural-net trained using Bayes-by-backprop. Using something like a Gaussian prior on each weight/bias variable intrinsially defines a confidence in the value of the parameter which can be propagated to give a confidence interval on the prediction. It is also well-suited to dealing with potentially empty values in the census data (many postcodes we're lacking demographic information, although normalisation  would be necessary to prevent sparsely-populated variables from becoming irrelevant in the model. However, Bayes-by-backprop models are somewhat time-consuming to train, especially if they have to deal with the 400+ combined ABS/ATO variables that we want to use.
+
+To optimise the hyperparameters, we performed a coarse exhaustive grid-search, and then used a bootstrapped gradient boosted regression tree method to further refine our set of hyperparameters with a constrained number of training runs. This generated a substantially better model than naive paramter estimation would have yielded.
 
 ## Data Ingestion
 To calculate the fraction of tax returns filed, we need to know the total number of people who ought to have filed tax returns in each postcode. The ABS data included in `atoabsgovhack2018.csv` is general population information, and not specifically about the working population.
@@ -29,7 +42,9 @@ Procedure:
 
 
 ## Possible extensions
-To facilitate the efficiency of the learned model, we might try to decorrelate our inputs. For continuous data, this is relatively straightforwrd (e.g. PCA), however the mixed inputs we have might need more care.
+The first next step will be to quantity the accuracy of the model. At the moment we attempt to contruct a confidene interval for each prediction by performing quantile regression. To do this, we add random noise to the gradient force additional branches in the regression trees. The procedure is described in https://towardsdatascience.com/regression-prediction-intervals-with-xgboost-428e0a018b. However, we had some difficulty adapting this method to our problem, partially due to the high-dimensionality of the problem and proportionately low number of samples.
+
+To facilitate the efficiency of the learned model, we might try to decorrelate our input (i.e. try and learn high-level features of the census and ATO data). For continuous data, this is relatively straightforwrd (e.g. PCA), however the mixed inputs we have might need more care.
 
 # Asumptions
 Assuming that the "total number of people working" is equal to the total number of people who ought to have lodged a tax return.

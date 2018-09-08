@@ -9,8 +9,7 @@ import {
     Segment,
 } from 'semantic-ui-react'
 
-
-export default class Home extends Component {
+export default class Page extends Component {
     render() {
         return (
             <Container>
