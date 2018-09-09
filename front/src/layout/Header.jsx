@@ -26,8 +26,11 @@ class Header extends Component {
                     content='Menu'
                 /> 
                 <Container>
-                    <Menu.Item header>
-                            Project Name
+                    <Menu.Item header style={{
+                        paddingTop:'8px',
+                        paddingBottom:'8px',
+                        fontSize:'1.5em'}}>
+                            Tax Help Center AI
                     </Menu.Item>
                 </Container>
                 <Menu.Item as='a' 
