@@ -24,6 +24,7 @@ export default class Page extends Component {
                           <List.Description>
                           <p>1. Marginalise G43 over age, sex, to get working population in each postcode</p>
                           <p>2. Append ATO data in `atoabsgovhack2018.csv` with the results from (1)</p>
+                          <p>As postal area approximates postcode, we could perform a join of many datasets seen in `munging/DataMunge.ipynb` trivially. There were only ~400 postcodes where tax help centres were built (or at least labeled). We labeled the raemining postcodes as having no tax centre, this allowed the machine learn from both positive and negative information. We were left with ~2500 rows and ~450 columns, in the analytics that we have presented as Combined ATO and Census we have given all of this information to the machine to learn from. With the analytics labeled ATO only data there are ~40 columns.</p>
                           </List.Description>
                         </List.Content>
                       </List.Item>
@@ -46,6 +47,28 @@ export default class Page extends Component {
                             <List.Description>
                               <p>The Census data provides a correlation between postcode and the total number of people working. The General Community Profile has a lot of data in it, the datasets of interest for us were in G43 and have been saved in `data/census/gcppoa/raw`.</p>
                               <a href='https://datapacks.censusdata.abs.gov.au/datapacks/'>Link</a>
+                            </List.Description>
+                          </List.Content>
+                        </List.Item>
+
+                        <List.Item>
+                          <List.Icon name='database' size='huge' verticalAlign='middle' />
+                          <List.Content>
+                            <List.Header as='a'>Census DataPacks 2016, Postal Area ArcGIS</List.Header>
+                            <List.Description>
+                              <p>To correlate postal area (approximates postcode) with GPS boundaries for displaying on a map. This one is directly correlated with the dataset above and was used to verify the results of the API.</p>
+                              <a href='https://datapacks.censusdata.abs.gov.au/datapacks/'>Link</a>
+                            </List.Description>
+                          </List.Content>
+                        </List.Item>
+
+                        <List.Item>
+                          <List.Icon name='database' size='huge' verticalAlign='middle' />
+                          <List.Content>
+                            <List.Header as='a'>ABS GeoSpatial API, Postal Area ArcGIS</List.Header>
+                            <List.Description>
+                              <p>Provides boundaries on a nice API call. Very handy.</p>
+                              <a href='https://geo.abs.gov.au/arcgis/rest/services/ASGS2016/POA/MapServer/0'>Link</a>
                             </List.Description>
                           </List.Content>
                         </List.Item>
