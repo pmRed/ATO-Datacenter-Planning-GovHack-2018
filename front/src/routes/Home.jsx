@@ -13,13 +13,13 @@ export default class Page extends Component {
     render() {
         return (
             <Container>
-                <Segment style={{ padding: '8em 0em' }} vertical>
-                    <h1>Our Implementation</h1>
+                <Segment style={{ padding: '30px 30px' }} vertical>
+                    <h1>What happens if I built a tax help centre... here!</h1>
                     <Grid container stackable verticalAlign='middle'>
                         <Grid.Row>
                             <Grid.Column width={8}>
                                 <Header as='h3'>
-                                    We Help Companies and Companions
+                                  The learned machines will tell us
                                 </Header>
                                 <p>
                                     We can give your company superpowers to do things that they never thought possible.
