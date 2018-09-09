@@ -1,12 +1,75 @@
 import React, { Component } from 'react'
+import _ from 'lodash'
 import {inject, observer} from 'mobx-react'
+import { Bar } from 'react-chartjs-2' 
 import Maps from '../components/Maps'
+import ml1 from '../stores/ez2_results_model_small'
+import ml2 from '../stores/ez2_results_model_large'
+import ag2 from '../stores/ez2_results_model_large_stateAggregated'
+import ag1 from '../stores/ez2_results_model_small_stateAggregated'
 import {
     Grid,
     Container,
     Segment,
 } from 'semantic-ui-react'
 
+const labelsValues = _.map(ag2,e=>e.State)
+const datasml = {
+    labels: labelsValues,
+    datasets: [
+        {
+            label: 'Expected Change in Tax Returns Filed',
+            backgroundColor: 'rgba(255,99,132,0.2)',
+            borderColor: 'rgba(255,99,132,1)',
+            borderWidth: 1,
+            hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+            hoverBorderColor: 'rgba(255,99,132,1)',
+            data: _.map(ag1,e=>e.deltaPeople)
+        },
+    ]
+}
+const datalrg = {
+    labels: labelsValues,
+    datasets: [
+        {
+            label: 'Expected Change in Tax Returns Filed',
+            backgroundColor: 'rgba(255,99,132,0.2)',
+            borderColor: 'rgba(255,99,132,1)',
+            borderWidth: 1,
+            hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+            hoverBorderColor: 'rgba(255,99,132,1)',
+            data: _.map(ag2,e=>e.deltaPeople)
+        },
+    ]
+}
+const datasmlPC = {
+    labels: labelsValues,
+    datasets: [
+        {
+            label: '% Change in Number of Filed Returns',
+            backgroundColor: 'rgba(99,132,255,0.2)',
+            borderColor: 'rgba(99,132,255,1)',
+            borderWidth: 1,
+            hoverBackgroundColor: 'rgba(99,132,255,0.4)',
+            hoverBorderColor: 'rgba(99,132,255,1)',
+            data: _.map(ag1,e=>e.deltaPeoplePC)
+        },
+    ]
+}
+const datalrgPC = {
+    labels: labelsValues,
+    datasets: [
+        {
+            label: '% Change in Number of Filed Returns',
+            backgroundColor: 'rgba(99,132,255,0.2)',
+            borderColor: 'rgba(99,132,255,1)',
+            borderWidth: 1,
+            hoverBackgroundColor: 'rgba(99,132,255,0.4)',
+            hoverBorderColor: 'rgba(99,132,255,1)',
+            data: _.map(ag2,e=>e.deltaPeoplePC)
+        },
+    ]
+}
 
 @inject('UIState')
 @observer
@@ -15,37 +78,75 @@ class Page extends Component {
         return (
             <Container fluid  style={{padding:'50px 50px'}}>
                 <h1> Machine Learning Analytics</h1>
-                <Segment>
+                <Segment textAlign='center'> 
+                  <h1>Ask the Artificial Intelligence</h1>
+                  <h2>What would happen if I built a tax centre here?</h2>
+                    <p><b>(Click a region on the map)</b></p>
+                    <Grid columns='equal' textAlign='center' divided>
+                        <Grid.Column>
+                            <h3>ATO only data</h3>
+                            <Container fluid style={{ height:'800px'}}>
+                                <Maps data={ml1}/>
+                            </Container>
+                        </Grid.Column>
+                        <Grid.Column>
+                            <h3>Combined ATO and Census</h3>
+                            <Container fluid style={{ height:'800px'}}>
+                                <Maps data={ml2}/>
+                            </Container>
+                        </Grid.Column>
+                    </Grid>
                     <h2>Aggregate Statics</h2>
-                    <Grid columns='equal'>
+                    <Grid divided columns='equal'>
                         <Grid.Column>
-                            <Segment>1</Segment>
+                            <Bar
+                                data={datasml}
+                                width={100}
+                                height={500}
+                                options={{
+                                    maintainAspectRatio: false
+                                }} 
+                            >
+                            </Bar>
                         </Grid.Column>
                         <Grid.Column>
-                            <Segment>2</Segment>
+                            <Bar
+                                data={datalrg}
+                                width={100}
+                                height={500}
+                                options={{
+                                    maintainAspectRatio: false
+                                }} 
+                            >
+                            </Bar>
+                        </Grid.Column>
+                    </Grid>
+                    <Grid divided columns='equal'>
+                        <Grid.Column>
+                            <Bar
+                                data={datasmlPC}
+                                width={100}
+                                height={500}
+                                options={{
+                                    maintainAspectRatio: false
+                                }} 
+                            >
+                            </Bar>
                         </Grid.Column>
                         <Grid.Column>
-                            <Segment>3</Segment>
+                            <Bar
+                                data={datalrgPC}
+                                width={100}
+                                height={500}
+                                options={{
+                                    maintainAspectRatio: false
+                                }} 
+                            >
+                            </Bar>
                         </Grid.Column>
                     </Grid>
                 </Segment>
 
-                <Grid columns='equal'>
-                    <Grid.Column>
-                        <Segment> 
-                            <h2>Tax Center Effectiveness By POA</h2>
-                            <Container fluid style={{ height:'800px'}}>
-                                <Maps/>
-                            </Container>
-                        </Segment>
-                    </Grid.Column>
-                    <Grid.Column>
-                        <Segment>
-                            <h2>Individual POA Statistics</h2>
-                            {this.props.UIState.regionSelected}
-                        </Segment>
-                    </Grid.Column>
-                </Grid>
             </Container>
         )
     }
