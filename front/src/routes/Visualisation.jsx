@@ -79,8 +79,8 @@ class Page extends Component {
             <Container fluid  style={{padding:'50px 50px'}}>
                 <h1> Machine Learning Analytics</h1>
                 <Segment textAlign='center'> 
-                  <h1>Ask the Artificial Intelligence</h1>
-                  <h2>What would happen if I built a tax centre here?</h2>
+                    <h1>Ask the Artificial Intelligence</h1>
+                    <h2>What would happen if I built a tax centre here?</h2>
                     <p><b>(Click a region on the map)</b></p>
                     <Grid columns='equal' textAlign='center' divided>
                         <Grid.Column>
