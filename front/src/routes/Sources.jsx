@@ -24,7 +24,7 @@ export default class Page extends Component {
                           <List.Description>
                           <p>1. Marginalise G43 over age, sex, to get working population in each postcode</p>
                           <p>2. Append ATO data in `atoabsgovhack2018.csv` with the results from (1)</p>
-                          <p>As postal area approximates postcode, we could perform a join of many datasets seen in `munging/DataMunge.ipynb` trivially. There were only ~400 postcodes where tax help centres were built (or at least labeled). We labeled the raemining postcodes as having no tax centre, this allowed the machine learn from both positive and negative information. We were left with ~2500 rows and ~450 columns, in the analytics that we have presented as Combined ATO and Census we have given all of this information to the machine to learn from. With the analytics labeled ATO only data there are ~40 columns.</p>
+                          <p>As postal area approximates postcode, we could perform a join of many datasets seen in `munging/DataMunge.ipynb` trivially. There were only ~400 postcodes where tax help centres were built (or at least labeled). We labeled the remaining postcodes as having no tax centre, this allowed the machine to learn from both positive and negative information. We were left with ~2500 rows and ~450 columns, in the analytics that we have presented as Combined ATO and Census we have given all of this information to the machine to learn from. With the analytics labeled ATO only data there are ~40 columns.</p>
                           </List.Description>
                         </List.Content>
                       </List.Item>
