@@ -14,92 +14,33 @@ export default class Page extends Component {
         return (
             <Container>
                 <Segment style={{ padding: '30px 30px' }} vertical>
-                    <h1>What happens if I built a tax help centre... here!</h1>
-                    <Grid container stackable verticalAlign='middle'>
-                        <Grid.Row>
-                            <Grid.Column width={8}>
-                                <Header as='h3'>
-                                  The learned machines will tell us
-                                </Header>
-                                <p>
-                                    We can give your company superpowers to do things that they never thought possible.
-                                    Let us delight your customers and empower your needs... through pure data analytics.
-                                </p>
-                                <Header as='h3'>
-                                    We Make Bananas That Can Dance
-                                </Header>
-                                <p>
-                                    Yes that's right, you thought it was the stuff of dreams, but even bananas can be
-                                    bioengineered.
-                                </p>
-                            </Grid.Column>
-                            <Grid.Column floated='right' width={6}>
-                                <Image bordered rounded size='large' src='/assets/logo.png' />
-                            </Grid.Column>
-                        </Grid.Row>
-                        <Grid.Row>
-                            <Grid.Column textAlign='center'>
-                                <Button size='huge'>Check Them Out</Button>
-                            </Grid.Column>
-                        </Grid.Row>
-                    </Grid>
-                </Segment>
-                <Segment vertical>
-                    <Grid celled='internally' columns='equal' stackable>
-                        <Grid.Row textAlign='center'>
-                            <Grid.Column style={{ paddingBottom: '5em', paddingTop: '5em' }}>
-                                <Header>
-                                    "What a Company"
-                                </Header>
-                                <p>
-                                    That is what they all say about us
-                                </p>
-                            </Grid.Column>
-                            <Grid.Column style={{ paddingBottom: '5em', paddingTop: '5em' }}>
-                                <Header as='h3'>
-                                    "I shouldn't have gone with their competitor."
-                                </Header>
-                                <p>
-                                    <Image avatar src='./assets/imgs/avatar/small/ade.jpg' />
-                                    <b>Nan</b> Chief Fun Officer Acme Toys
-                                </p>
-                            </Grid.Column>
-                        </Grid.Row>
-                    </Grid>
-                </Segment>
-                <Segment style={{ padding: '8em 0em' }} vertical>
-                    <Container text>
-                        <Header as='h3'>
-                            Breaking The Grid, Grabs Your Attention
-                        </Header>
-                        <p>
-                            Instead of focusing on content creation and hard work, we have learned how to master the
-                            art of doing nothing by providing massive amounts of whitespace and generic content that
-                            can seem massive, monolithic and worth your attention.
-                        </p>
-                        <Button as='a' size='large'>
-                            Read More
-                        </Button>
-                        <Divider
-                            as='h4'
-                            className='header'
-                            horizontal
-                        >
-                            <a>Case Studies</a>
+                    <h1>Overview</h1>
+                    <b>We used machine learning to calculate the predicted impact of adding a new tax center at any particular postcode.</b>
 
-                        </Divider>
-                        <Header as='h3'>
-                            Did We Tell You About Our Bananas?
-                        </Header>
-                        <p>
-                            Yes I know you probably disregarded the earlier boasts as non-sequitur filler content, but
-                            it's really true. It took years of gene splicing and combinatory DNA research, but our
-                            bananas can really dance.
-                        </p>
-                        <Button as='a' size='large'>
-                            I'm Still Quite Interested
-                        </Button>
-                    </Container>
+The impact was measured in terms of the number of tax returns filed and the total, which hopefully allows the ATO to identify the best locations for new Tax Help Centers which benefit the most people.
+
+It's important to note that the model we developed is extremely flexible, and is not at all limited to predicting the effect of adding new Tax Help Centers. There are some 400+ input parameters that can be adjusted. We could, for example, use it to predict changes in taxation due to demographic shifts with respect to age, sex, occupational status, etc.
+
+                    <h2 id="preparingdatasets">Preparing datasets</h2>
+
+                    <p>o calculate the fraction of tax returns filed, we need to know the total number of people who ought to have filed tax returns in each postcode. The ABS data included in <code>atoabsgovhack2018.csv</code> is general population information, and not specifically about the working population.</p>
+
+                    <p>We can get the working population in each postcode from GCCPOA G43. However, the data is also paramterised with respect to age and sex.</p>
+
+                    <ol>
+                        <li><p>Marginalise G43 over age, sex, to get working population in each postcode</p></li>
+
+                        <li><p>Append ATO data in <code>atoabsgovhack2018.csv</code> with the results from (1)</p></li>
+                    </ol>
+
+                    <p>As postal area approximates postcode, we could perform a join of many datasets seen in <code>munging/DataMunge.ipynb</code> trivially. There were only ~400 postcodes where tax help centres were built (or at least labeled). We labeled the remaining postcodes as having no tax centre, this allowed the machine to learn from both positive and negative information. We were left with ~2500 rows and ~450 columns, in the analytics that we have presented as Combined ATO and Census we have given all of this information to the machine to learn from. With the analytics labeled ATO only data there are ~40 columns.</p>
+
+                    <h2 id="buildingmodels">Building Models</h2>
+
+                    <p>Given the mix of continuous and discrete types in the data, and the relatively small size of the sample set (i.e. number of taxed postcodes), we have used a gradient-boosted regression tree (GBRT) method. We have employed the DART tree booster (described in Rashmi Korlakai Vinayak, Ran Gilad-Bachrach. “DART: Dropouts meet Multiple Additive Regression Trees.” JMLR.) which adapts dropout regularisation from deep learning to boosted trees, ameliorating the tendency of these models to overfit their training data. The model hyperparameters were optimised using a hybrid coarse grid-search and meta GBRT optimiser</p>
+
+                    <p>We trained models using a subset of the ATO data only, and another model which used the combined ATO/ABS data. We found that the ATO data was overly optimistic about the impact of a new Tax Help Center; whereas the model trained on the ATO/ABS data was somewhat pessimistic. We included interactive graphs of both models for comparison.</p>
+
                 </Segment>
             </Container>
         )
