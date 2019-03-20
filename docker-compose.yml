@@ -1,0 +1,7 @@
+version: '2.3'
+
+services:
+  frontend:
+    build: ./front
+    ports:
+      - 5000:3000
